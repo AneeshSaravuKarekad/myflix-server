@@ -42,6 +42,10 @@ class MovieServices {
     }
   }
 
+  /**
+   * @function searchByFeatured
+   * @returns {Object}
+   */
   searchByFeatured() {
     this.query = this.query.find({ featured: true });
     return this;
