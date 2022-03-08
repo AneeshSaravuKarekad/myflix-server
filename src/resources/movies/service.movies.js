@@ -57,6 +57,25 @@ class MovieServices {
     return this;
   }
 
+  /**
+   * @function searchByActor
+   * @param {String} actorName
+   * @returns {Object}
+   */
+  searchByActor(actorName) {
+    this.query = this.query.find({
+      actors: {
+        $elemMatch: { name: actorName },
+      },
+    });
+    this.total = this.query.model.countDocuments(this.query).exec();
+    return this;
+  }
+
+  /**
+   * @function searchByDirector
+   * @returns {Object}
+   */
   searchByDirector() {
     this.query.find(this.queryString);
     return this;

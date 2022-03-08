@@ -17,6 +17,7 @@ class MovieController {
       `${this.path}/directors/:directorName`,
       this.getMoviesByDirector
     );
+    this.router.get(`${this.path}/actors/:actorName`, this.getMoviesByActor);
   }
 
   getMovies = async (req, res, next) => {
@@ -87,6 +88,27 @@ class MovieController {
     } catch (error) {
       next(new HttpExceptions(500, error.message));
     }
+  };
+
+  getMoviesByActor = async (req, res, next) => {
+    try {
+      const { actorName } = req.params;
+      const movieServices = new MovieServices(
+        MovieModel.find(),
+        req.query
+      ).searchByActor(actorName);
+      const movies = await movieServices.query;
+
+      if (!movies) {
+        next(new HttpExceptions(404, `No movies found by ${actorName}`));
+      } else {
+        res.status(200).json({
+          success: true,
+          count: movies.length,
+          movies,
+        });
+      }
+    } catch (error) {}
   };
 }
 
