@@ -1,13 +1,41 @@
-import MovieModel from './model.movie.js';
+/**
+ * @class BaseController
+ * @description Implements different API features
+ *
+ */
 
 class MovieServices {
-  constructor() {
-    this.Movie = MovieModel;
+  /**
+   * @constructor
+   * @param {*} query
+   * @param {Object} queryStr
+   */
+  constructor(query, queryString) {
+    this.query = query;
+    this.queryString = queryString;
+    this.total;
   }
-  async get() {
+
+  /**
+   * @function search
+   * @description Implements partial search of documents
+   * @returns {Object}
+   */
+  search() {
     try {
-      const movies = await this.Movie.find();
-      return movies;
+      const title = this.queryString.title
+        ? {
+            title: {
+              $regex: this.queryString.title,
+              $options: 'i',
+            },
+          }
+        : {};
+
+      console.log({ ...title });
+      this.query = this.query.find({ ...title });
+      this.total = this.query.model.countDocuments(this.query).exec();
+      return this;
     } catch (error) {
       throw new Error('Unable to find movies');
     }
