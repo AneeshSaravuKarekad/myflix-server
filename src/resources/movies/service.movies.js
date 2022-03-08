@@ -41,6 +41,12 @@ class MovieServices {
       throw new Error('Unable to find movies');
     }
   }
+
+  searchByFeatured() {
+    this.query = this.query.find({ featured: true });
+    return this;
+  }
+
   /**
    * @function searchByGenre
    * @param {String} genreName

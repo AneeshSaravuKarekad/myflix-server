@@ -18,6 +18,7 @@ class MovieController {
       this.getMoviesByDirector
     );
     this.router.get(`${this.path}/actors/:actorName`, this.getMoviesByActor);
+    this.router.get(`${this.path}/featured`, this.getMoviesByFeatured);
   }
 
   getMovies = async (req, res, next) => {
@@ -37,6 +38,28 @@ class MovieController {
         count: movies.length,
         movies,
       });
+    } catch (error) {
+      next(new HttpExceptions(500, error.message));
+    }
+  };
+
+  getMoviesByFeatured = async (req, res, next) => {
+    try {
+      const movieServices = new MovieServices(
+        MovieModel.find(),
+        req.query
+      ).searchByFeatured();
+
+      const movies = await movieServices.query;
+      if (!movies) {
+        next(new HttpExceptions(404, 'No featured movies'));
+      } else {
+        res.status(200).json({
+          success: true,
+          count: movies.length,
+          movies,
+        });
+      }
     } catch (error) {
       next(new HttpExceptions(500, error.message));
     }
