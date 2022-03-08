@@ -33,7 +33,6 @@ class MovieServices {
           }
         : {};
 
-      console.log({ ...title });
       this.query = this.query.find({ ...title });
       this.total = this.query.model.countDocuments(this.query).exec();
       return this;
