@@ -20,6 +20,7 @@ class MovieController {
       const resultsPerPage = 20;
       const movieServices = new MovieServices(MovieModel.find(), req.query)
         .search()
+        .filter()
         .paginate(resultsPerPage);
       const movies = await movieServices.query;
       const total = await movieServices.total;
@@ -41,6 +42,7 @@ class MovieController {
     const resultsPerPage = 20;
     const movieServices = new MovieServices(MovieModel.find(), req.query)
       .searchByGenre(genreName)
+      .filter()
       .paginate(resultsPerPage);
     const movies = await movieServices.query;
     const total = await movieServices.total;

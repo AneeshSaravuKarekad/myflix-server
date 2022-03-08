@@ -41,6 +41,11 @@ class MovieServices {
       throw new Error('Unable to find movies');
     }
   }
+  /**
+   * @function searchByGenre
+   * @param {String} genreName
+   * @returns {Object}
+   */
 
   searchByGenre(genreName) {
     this.query = this.query.find({
@@ -57,6 +62,21 @@ class MovieServices {
     const skip = (currentPage - 1) * resultPerPage;
     this.page = currentPage;
     this.query = this.query.limit(resultPerPage).skip(skip);
+    return this;
+  }
+
+  filter() {
+    const queryCopy = { ...this.queryStr };
+
+    // Remove fields for feature
+    const removeFields = ['title', 'page', 'limit'];
+    removeFields.forEach((key) => delete queryCopy[key]);
+
+    // Filter for rating and release Year
+    let queryStr = JSON.stringify(queryCopy);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+
+    this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
 }
