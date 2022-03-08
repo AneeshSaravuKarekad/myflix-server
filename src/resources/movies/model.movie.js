@@ -13,7 +13,11 @@ const movieSchema = new Schema({
   runTime: { type: String, trim: true },
   director: personSchema,
   actors: [personSchema],
-  genres: [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
+  genres: [
+    {
+      name: { type: String, trim: true },
+    },
+  ],
   imagePath: { type: String, trim: true },
   featured: { type: Boolean },
 });

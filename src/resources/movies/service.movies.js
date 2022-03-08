@@ -14,6 +14,7 @@ class MovieServices {
     this.query = query;
     this.queryString = queryString;
     this.total;
+    this.page;
   }
 
   /**
@@ -39,6 +40,24 @@ class MovieServices {
     } catch (error) {
       throw new Error('Unable to find movies');
     }
+  }
+
+  searchByGenre(genreName) {
+    this.query = this.query.find({
+      genres: {
+        $elemMatch: { name: genreName },
+      },
+    });
+    this.total = this.query.model.countDocuments(this.query).exec();
+    return this;
+  }
+
+  paginate(resultPerPage) {
+    const currentPage = parseInt(this.queryString.page) || 1;
+    const skip = (currentPage - 1) * resultPerPage;
+    this.page = currentPage;
+    this.query = this.query.limit(resultPerPage).skip(skip);
+    return this;
   }
 }
 
