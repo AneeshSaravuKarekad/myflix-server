@@ -57,6 +57,11 @@ class MovieServices {
     return this;
   }
 
+  searchByDirector() {
+    this.query.find(this.queryString);
+    return this;
+  }
+
   paginate(resultPerPage) {
     const currentPage = parseInt(this.queryString.page) || 1;
     const skip = (currentPage - 1) * resultPerPage;
