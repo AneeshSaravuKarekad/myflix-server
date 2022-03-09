@@ -1,6 +1,7 @@
-const { check, validationResult } = require('express-validator');
+import expressValidator from 'express-validator';
+const { check, validationResult } = expressValidator;
 
-const validationRules = () => {
+export const validationRules = () => {
   return [
     // Email Validation
     check('email')
@@ -32,7 +33,7 @@ const validationRules = () => {
   ];
 };
 
-const validate = (req, res, next) => {
+export const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();
@@ -43,9 +44,4 @@ const validate = (req, res, next) => {
   return res.status(422).json({
     errors: extractedErrors,
   });
-};
-
-module.exports = {
-  validationRules,
-  validate,
 };

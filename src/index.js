@@ -2,9 +2,10 @@ import dotenv from 'dotenv';
 import App from './app.js';
 import config from './config/index.js';
 import MovieController from './resources/movies/controller.movies.js';
+import UserController from './resources/user/controller.user.js';
 
 dotenv.config({ silent: process.env.NODE_ENV === 'production' });
 
-const app = new App([new MovieController()], config.PORT);
+const app = new App([new MovieController(), new UserController()], config.PORT);
 
 app.listen();

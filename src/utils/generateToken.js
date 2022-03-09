@@ -4,7 +4,7 @@ import config from '../config/index.js';
 const { JWT_KEY, EXPIRES_IN, ALGO } = config;
 
 export const createToken = (user) => {
-  jwt.sign({ id: user._id }, JWT_KEY, {
+  return jwt.sign({ id: user._id, username: user.username }, JWT_KEY, {
     expiresIn: EXPIRES_IN,
     algorithm: ALGO,
   });

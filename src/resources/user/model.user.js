@@ -9,7 +9,7 @@ const userSchema = new Schema(
     email: { type: String, required: true, trim: true, unique: true },
     password: { type: String, required: true, select: false },
     birthDate: { type: String, required: true },
-    favourites: { type: Schema.Types.ObjectId, ref: 'Movie' },
+    favourites: { type: Schema.Types.ObjectId, ref: 'Movie', default: null },
   },
   { timestamps: true }
 );
