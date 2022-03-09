@@ -20,6 +20,8 @@ class UserController {
       validate,
       this.register
     );
+
+    this.router.post(`${this.path}/login`, authLocal, this.login);
   }
 
   register = async (req, res, next) => {
@@ -43,8 +45,20 @@ class UserController {
         });
       }
     } catch (error) {
-      console.log(error.stack);
-      throw new Error('Something went wrong');
+      throw new Error(error.message);
+    }
+  };
+
+  login = async (req, res, next) => {
+    try {
+      const accessToken = `Bearer ${createToken(req.user)}`;
+      res.status(200).json({
+        success: true,
+        user: { ...req.user._doc, password: undefined },
+        token: accessToken,
+      });
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
 }

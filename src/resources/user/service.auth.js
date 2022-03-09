@@ -15,7 +15,6 @@ const verifyLocalCallback = async (email, password, done) => {
     const user = await UserModel.findOne({ email: normalizedEmail }).select(
       '+password'
     );
-
     if (!user) {
       done(null, false, { message: 'Incorrect Email or Password' });
     } else {
