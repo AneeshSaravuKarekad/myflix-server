@@ -29,7 +29,7 @@ class UserController {
       const { email, username, password, birthDate } = req.body;
       const user = await this.User.findOne({ email });
       if (user) {
-        next(new HttpExceptions(201, 'Email already exists'));
+        next(new HttpExceptions(400, 'Email already exists'));
       } else {
         const newUser = await this.User.create({
           email,
