@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import HttpExceptions from '../../utils/exceptions/exception.http.js';
-import { authLocal } from './service.auth.js';
+import { authLocal, authJwt } from './service.auth.js';
 import { validationRules, validate } from './validation.user.js';
 import UserModel from './model.user.js';
 import { createToken } from '../../utils/generateToken.js';

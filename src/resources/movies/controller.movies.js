@@ -2,6 +2,7 @@ import { Router } from 'express';
 import HttpExceptions from '../../utils/exceptions/exception.http.js';
 import MovieServices from './service.movies.js';
 import MovieModel from './model.movie.js';
+import { authJwt } from '../user/service.auth.js';
 class MovieController {
   path = '/movies';
   router = Router();
@@ -11,7 +12,7 @@ class MovieController {
   }
 
   initializeRoutes() {
-    this.router.get(`${this.path}`, this.getMovies);
+    this.router.get(`${this.path}`, authJwt, this.getMovies);
     this.router.get(`${this.path}/genres/:genreName`, this.getMoviesByGenre);
     this.router.get(
       `${this.path}/directors/:directorName`,
