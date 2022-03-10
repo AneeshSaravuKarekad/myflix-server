@@ -22,6 +22,16 @@ class UserController {
     );
 
     this.router.post(`${this.path}/login`, authLocal, this.login);
+
+    this.router.get(`${this.path}/favourites`, authJwt, this.getFavourites);
+
+    this.router.put(`${this.path}/favourites`, authJwt, this.addToFavourites);
+
+    this.router.delete(
+      `${this.path}/favourites`,
+      authJwt,
+      this.removeFromFavourites
+    );
   }
 
   register = async (req, res, next) => {
@@ -56,6 +66,57 @@ class UserController {
         success: true,
         user: { ...req.user._doc, password: undefined },
         token: accessToken,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  getFavourites = async (req, res, next) => {
+    try {
+      res.status(200).json({
+        success: true,
+        favourites: req.user.favourites,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  addToFavourites = async (req, res, next) => {
+    try {
+      const { movieId } = req.body;
+      const user = await this.User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $addToSet: { favourites: movieId },
+        },
+        { new: true }
+      );
+
+      res.status(201).json({
+        success: true,
+        favourites: user.favourites,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  removeFromFavourites = async (req, res, next) => {
+    try {
+      const { movieId } = req.body;
+      const user = await this.User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $pull: { favourites: movieId },
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        success: true,
+        favourites: user.favourites,
       });
     } catch (error) {
       throw new Error(error.message);
