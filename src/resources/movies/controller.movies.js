@@ -13,13 +13,22 @@ class MovieController {
 
   initializeRoutes() {
     this.router.get(`${this.path}`, authJwt, this.getMovies);
-    this.router.get(`${this.path}/genres/:genreName`, this.getMoviesByGenre);
+    this.router.get(
+      `${this.path}/genres/:genreName`,
+      authJwt,
+      this.getMoviesByGenre
+    );
     this.router.get(
       `${this.path}/directors/:directorName`,
+      authJwt,
       this.getMoviesByDirector
     );
-    this.router.get(`${this.path}/actors/:actorName`, this.getMoviesByActor);
-    this.router.get(`${this.path}/featured`, this.getMoviesByFeatured);
+    this.router.get(
+      `${this.path}/actors/:actorName`,
+      authJwt,
+      this.getMoviesByActor
+    );
+    this.router.get(`${this.path}/featured`, authJwt, this.getMoviesByFeatured);
   }
 
   getMovies = async (req, res, next) => {
