@@ -28,7 +28,7 @@ class UserController {
     this.router.put(`${this.path}/favourites`, authJwt, this.addToFavourites);
 
     this.router.delete(
-      `${this.path}/favourites`,
+      `${this.path}/favourites/:movieId`,
       authJwt,
       this.removeFromFavourites
     );
@@ -108,7 +108,7 @@ class UserController {
 
   removeFromFavourites = async (req, res, next) => {
     try {
-      const { movieId } = req.body;
+      const { movieId } = req.params;
       const user = await this.User.findOneAndUpdate(
         { _id: req.user._id },
         {
