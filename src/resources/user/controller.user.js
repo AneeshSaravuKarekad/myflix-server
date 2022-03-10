@@ -74,9 +74,12 @@ class UserController {
 
   getFavourites = async (req, res, next) => {
     try {
+      const user = await this.User.findById(req.user._id).populate(
+        'favourites'
+      );
       res.status(200).json({
         success: true,
-        favourites: req.user.favourites,
+        favourites: user.favourites,
       });
     } catch (error) {
       throw new Error(error.message);
@@ -92,7 +95,7 @@ class UserController {
           $addToSet: { favourites: movieId },
         },
         { new: true }
-      );
+      ).populate('favourites');
 
       res.status(201).json({
         success: true,
@@ -112,7 +115,7 @@ class UserController {
           $pull: { favourites: movieId },
         },
         { new: true }
-      );
+      ).populate('favourites');
 
       res.status(200).json({
         success: true,
