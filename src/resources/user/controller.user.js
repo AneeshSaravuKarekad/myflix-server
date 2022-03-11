@@ -23,6 +23,8 @@ class UserController {
 
     this.router.post(`${this.path}/login`, authLocal, this.login);
 
+    this.router.get(`${this.path}/profile`, authJwt, this.getProfile);
+
     this.router.get(`${this.path}/favourites`, authJwt, this.getFavourites);
 
     this.router.put(`${this.path}/favourites`, authJwt, this.addToFavourites);
@@ -69,6 +71,26 @@ class UserController {
       });
     } catch (error) {
       throw new Error(error.message);
+    }
+  };
+
+  getProfile = async (req, res, next) => {
+    try {
+      if (!req.user) {
+        console.log(req);
+        res.status(400).json({
+          success: false,
+          message: 'User not found',
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          user: req.user,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      next(new HttpExceptions(500, error.message));
     }
   };
 
