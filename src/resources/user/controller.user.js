@@ -25,6 +25,8 @@ class UserController {
 
     this.router.get(`${this.path}/profile`, authJwt, this.getProfile);
 
+    this.router.post(`${this.path}/profile`, authJwt, this.updateProfile);
+
     this.router.get(`${this.path}/favourites`, authJwt, this.getFavourites);
 
     this.router.put(`${this.path}/favourites`, authJwt, this.addToFavourites);
@@ -89,7 +91,25 @@ class UserController {
         });
       }
     } catch (error) {
-      console.log(error);
+      next(new HttpExceptions(500, error.message));
+    }
+  };
+
+  updateProfile = async (req, res, next) => {
+    try {
+      let user = await this.User.findById(req.user._id);
+      const { email, username, password, birthDate } = req.body;
+      user.username = username;
+      user.email = email;
+      user.password = password;
+      user.birthDate = birthDate;
+      user.save();
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
       next(new HttpExceptions(500, error.message));
     }
   };
