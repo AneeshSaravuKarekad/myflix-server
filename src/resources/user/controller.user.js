@@ -27,6 +27,8 @@ class UserController {
 
     this.router.post(`${this.path}/profile`, authJwt, this.updateProfile);
 
+    this.router.delete(`${this.path}/profile`, authJwt, this.deleteUser);
+
     this.router.get(`${this.path}/favourites`, authJwt, this.getFavourites);
 
     this.router.put(`${this.path}/favourites`, authJwt, this.addToFavourites);
@@ -108,6 +110,18 @@ class UserController {
       res.status(201).json({
         success: true,
         user,
+      });
+    } catch (error) {
+      next(new HttpExceptions(500, error.message));
+    }
+  };
+
+  deleteUser = async (req, res, next) => {
+    try {
+      await this.User.deleteOne(req.user._id);
+      res.status(201).json({
+        success: true,
+        message: 'Successfully deleted user',
       });
     } catch (error) {
       next(new HttpExceptions(500, error.message));
