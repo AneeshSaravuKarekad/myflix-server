@@ -186,7 +186,9 @@ class MovieController {
           movies,
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      next(new HttpExceptions(500, error.message));
+    }
   };
 }
 
