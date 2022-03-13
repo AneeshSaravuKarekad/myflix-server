@@ -156,12 +156,32 @@ class MovieController {
         req.query
       ).searchByActor(actorName);
       const movies = await movieServices.query;
+      let actor = {};
+      actor = movies.map((movie) => {
+        let result = movie.actors.map((actor) => {
+          if (actor.name === actorName) {
+            return actor;
+          }
+        });
+
+        return result;
+      });
+
+      let filter = {};
+      actor.forEach((a) => {
+        if (a) {
+          filter.test = a;
+        }
+      });
 
       if (!movies) {
         next(new HttpExceptions(404, `No movies found by ${actorName}`));
       } else {
         res.status(200).json({
           success: true,
+          actor: filter.test.filter(function (a) {
+            return a !== undefined;
+          })[0],
           count: movies.length,
           movies,
         });
