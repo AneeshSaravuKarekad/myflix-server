@@ -13,6 +13,9 @@ class MovieController {
 
   initializeRoutes() {
     this.router.get(`${this.path}`, authJwt, this.getMovies);
+
+    this.router.get(`${this.path}/:movieId`, authJwt, this.getMovieById);
+
     this.router.get(
       `${this.path}/genres/:genreName`,
       authJwt,
@@ -50,6 +53,28 @@ class MovieController {
       });
     } catch (error) {
       next(new HttpExceptions(500, error.message));
+    }
+  };
+
+  getMovieById = async (req, res, next) => {
+    const { movieId } = req.params;
+    const movieServices = new MovieServices(
+      MovieModel.find(),
+      req.query
+    ).searchMovieById(movieId);
+
+    const movie = await movieServices.query;
+
+    if (!movie) {
+      res.status(404).json({
+        success: false,
+        message: 'No movie found',
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        movie,
+      });
     }
   };
 

@@ -50,6 +50,11 @@ class MovieServices {
     return this;
   }
 
+  searchMovieById(movieId) {
+    this.query = this.query.findOne({ _id: movieId });
+    return this;
+  }
+
   /**
    * @function searchByGenre
    * @param {String} genreName
