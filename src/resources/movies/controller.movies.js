@@ -141,6 +141,7 @@ class MovieController {
           success: true,
           count: movies.length,
           movies,
+          director: movies[0].director,
         });
       }
     } catch (error) {

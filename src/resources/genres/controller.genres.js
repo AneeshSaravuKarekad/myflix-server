@@ -18,7 +18,6 @@ class GenreController {
 
   getGenres = async (req, res, next) => {
     try {
-      console.log('here');
       const genreServices = new GenreServices(
         GenreModel.find(),
         req.query
