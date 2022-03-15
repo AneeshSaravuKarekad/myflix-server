@@ -96,8 +96,6 @@ class MovieServices {
   }
 
   addReview(body, user) {
-    // console.log(body, user._id);
-    // console.log(this.query);
     this.query = this.query.updateOne(
       {},
       {

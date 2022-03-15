@@ -18,6 +18,8 @@ class MovieController {
 
     this.router.post(`${this.path}/:movieId/reviews`, authJwt, this.addReview);
 
+    this.router.get(`${this.path}/:movieId/reviews`, authJwt, this.getReview);
+
     this.router.get(
       `${this.path}/genres/:genreName`,
       authJwt,
@@ -216,6 +218,33 @@ class MovieController {
         res.status(201).json({
           success: true,
           message: 'Successfully added a review',
+        });
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  getReview = async (req, res, next) => {
+    try {
+      const { movieId } = req.params;
+
+      const movieServices = new MovieServices(
+        MovieModel.find(),
+        req.query
+      ).searchMovieById(movieId);
+
+      const movie = await movieServices.query.populate({
+        path: 'reviews.postedBy',
+        select: 'username',
+      });
+
+      if (!movie) {
+        next(new HttpExceptions(404, 'Movie not found'));
+      } else {
+        res.status(200).json({
+          success: true,
+          reviews: movie.reviews,
         });
       }
     } catch (error) {
