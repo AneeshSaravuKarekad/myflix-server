@@ -107,14 +107,21 @@ class MovieServices {
     const queryCopy = { ...this.queryStr };
 
     // Remove fields for feature
-    const removeFields = ['title', 'page', 'limit'];
+    const removeFields = ['title', 'page', 'limit', 'sort'];
     removeFields.forEach((key) => delete queryCopy[key]);
 
     // Filter for rating and release Year
     let queryStr = JSON.stringify(queryCopy);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
 
-    this.query = this.query.find(JSON.parse(queryStr));
+    // Sorting options
+    let sortByString = 'releaseYear';
+    if (this.queryString.sort) {
+      const sortByArray = this.queryString.sort.split(',');
+      sortByString = sortByArray.join(' ');
+    }
+
+    this.query = this.query.find(JSON.parse(queryStr)).sort(sortByString);
     return this;
   }
 }
