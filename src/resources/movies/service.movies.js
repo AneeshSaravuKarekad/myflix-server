@@ -95,6 +95,26 @@ class MovieServices {
     return this;
   }
 
+  addReview(body, user) {
+    // console.log(body, user._id);
+    // console.log(this.query);
+    this.query = this.query.updateOne(
+      {},
+      {
+        $push: {
+          reviews: {
+            postedBy: user._id,
+            caption: body.caption,
+            comment: body.comment,
+            stars: body.stars,
+          },
+        },
+      },
+      { new: true }
+    );
+    return this;
+  }
+
   paginate(resultPerPage) {
     const currentPage = parseInt(this.queryString.page) || 1;
     const skip = (currentPage - 1) * resultPerPage;

@@ -7,6 +7,7 @@ const reviewSchema = new Schema(
     postedBy: { type: Schema.Types.ObjectId, ref: 'User' },
     caption: { type: String, required: true, trim: true },
     comment: { type: String, required: true, trim: true },
+    stars: { type: Number, required: true },
   },
   { timestamps: true }
 );

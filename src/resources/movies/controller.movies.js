@@ -16,21 +16,26 @@ class MovieController {
 
     this.router.get(`${this.path}/:movieId`, authJwt, this.getMovieById);
 
+    this.router.post(`${this.path}/:movieId/reviews`, authJwt, this.addReview);
+
     this.router.get(
       `${this.path}/genres/:genreName`,
       authJwt,
       this.getMoviesByGenre
     );
+
     this.router.get(
       `${this.path}/directors/:directorName`,
       authJwt,
       this.getMoviesByDirector
     );
+
     this.router.get(
       `${this.path}/actors/:actorName`,
       authJwt,
       this.getMoviesByActor
     );
+
     this.router.get(`${this.path}/featured`, authJwt, this.getMoviesByFeatured);
   }
 
@@ -189,6 +194,32 @@ class MovieController {
       }
     } catch (error) {
       next(new HttpExceptions(500, error.message));
+    }
+  };
+
+  addReview = async (req, res, next) => {
+    try {
+      const { movieId } = req.params;
+
+      const movieServices = new MovieServices(MovieModel.find(), req.query)
+        .searchMovieById(movieId)
+        .addReview(req.body, req.user);
+
+      const updateStatus = await movieServices.query;
+
+      if (updateStatus.knowledge) {
+        res.status(204).json({
+          success: false,
+          message: 'Failed to add review',
+        });
+      } else {
+        res.status(201).json({
+          success: true,
+          message: 'Successfully added a review',
+        });
+      }
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
 }
