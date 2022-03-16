@@ -3,6 +3,7 @@ import HttpExceptions from '../../utils/exceptions/exception.http.js';
 import MovieServices from './service.movies.js';
 import MovieModel from './model.movie.js';
 import { authJwt } from '../user/service.auth.js';
+import mongoose from 'mongoose';
 class MovieController {
   path = '/movies';
   router = Router();
@@ -229,10 +230,12 @@ class MovieController {
     try {
       const { movieId } = req.params;
 
+      const movieOid = mongoose.Types.ObjectId(movieId);
+
       const movieServices = new MovieServices(
         MovieModel.find(),
         req.query
-      ).searchMovieById(movieId);
+      ).searchMovieById(movieOid);
 
       const movie = await movieServices.query.populate({
         path: 'reviews.postedBy',
@@ -244,6 +247,7 @@ class MovieController {
       } else {
         res.status(200).json({
           success: true,
+          count: movie.reviews.length,
           reviews: movie.reviews,
         });
       }
