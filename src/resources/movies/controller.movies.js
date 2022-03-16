@@ -242,13 +242,17 @@ class MovieController {
         select: 'username',
       });
 
+      const reviews = movie.reviews.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
       if (!movie) {
         next(new HttpExceptions(404, 'Movie not found'));
       } else {
         res.status(200).json({
           success: true,
           count: movie.reviews.length,
-          reviews: movie.reviews,
+          reviews: reviews,
         });
       }
     } catch (error) {
