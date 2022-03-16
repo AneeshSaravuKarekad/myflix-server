@@ -66,10 +66,11 @@ class MovieController {
 
   getMovieById = async (req, res, next) => {
     const { movieId } = req.params;
+    const movieOid = mongoose.Types.ObjectId(movieId);
     const movieServices = new MovieServices(
       MovieModel.find(),
       req.query
-    ).searchMovieById(movieId);
+    ).searchMovieById(movieOid);
 
     const movie = await movieServices.query;
 
