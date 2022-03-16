@@ -65,25 +65,30 @@ class MovieController {
   };
 
   getMovieById = async (req, res, next) => {
-    const { movieId } = req.params;
-    const movieOid = mongoose.Types.ObjectId(movieId);
-    const movieServices = new MovieServices(
-      MovieModel.find(),
-      req.query
-    ).searchMovieById(movieOid);
+    try {
+      console.log('here');
+      const { movieId } = req.params;
+      const movieOid = mongoose.Types.ObjectId(movieId);
+      const movieServices = new MovieServices(
+        MovieModel.find(),
+        req.query
+      ).searchMovieById(movieOid);
 
-    const movie = await movieServices.query;
+      const movie = await movieServices.query;
 
-    if (!movie) {
-      res.status(404).json({
-        success: false,
-        message: 'No movie found',
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        movie,
-      });
+      if (!movie) {
+        res.status(404).json({
+          success: false,
+          message: 'No movie found',
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          movie,
+        });
+      }
+    } catch (error) {
+      next(new HttpExceptions(500, error.stack));
     }
   };
 
