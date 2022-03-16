@@ -66,7 +66,6 @@ class MovieController {
 
   getMovieById = async (req, res, next) => {
     try {
-      console.log('here');
       const { movieId } = req.params;
       const movieOid = mongoose.Types.ObjectId(movieId);
       const movieServices = new MovieServices(

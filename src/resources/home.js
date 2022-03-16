@@ -17,7 +17,7 @@ class HomeController {
     res.status(200).send(`
       <div>
         <h1>Welcome to myFlix API</h1>
-        <h3>Visit : for documentation</h3>
+        <h3>Visit : <a href="https://documenter.getpostman.com/view/18368988/UVsMuQyh">Documentation</a> for more information</h3>
       </div>
   `);
   };
