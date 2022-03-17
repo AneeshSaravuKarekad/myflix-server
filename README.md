@@ -79,7 +79,6 @@
 ---
 
 ## Getting Started
-
 ### Prerequisites
 
 - npm
@@ -123,6 +122,8 @@
   ```sh
     npm start
   ```
+
+3. For more information about the api usage visit the [documentation](https://documenter.getpostman.com/view/18368988/UVsMuQyh)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
